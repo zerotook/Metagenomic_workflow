@@ -12,5 +12,7 @@ Workflow for a shotgun Metagenomic Seuqncing:
          Taxonomy annotation/ PCA and NMDS analyses/ Antibiotic-Resistant Gene Distributions/ etc.
 ![image](https://github.com/zerotook/Assembly/assets/102132762/2c2cc0cf-dc43-43a4-8c42-dd2dec515cde)
 
-## Galaxy - trim with Trimmomatic
-## Galaxy - QC
+# Galaxy - trim with Trimmomatic and QC
+1. Go to www.usegalaxy.org and create an account.
+2. Create a history and upload your paired end fastq reads (each sample gets two files: R1 and R2).
+3. 
