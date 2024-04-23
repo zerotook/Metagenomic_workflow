@@ -15,4 +15,21 @@ Workflow for a shotgun Metagenomic Seuqncing:
 # Galaxy - trim with Trimmomatic and QC
 1. Go to www.usegalaxy.org and create an account.
 2. Create a history and upload your paired end fastq reads (each sample gets two files: R1 and R2).
-3. 
+3. Go to Workflow Tab, import workflow through this url: https://usegalaxy.org/u/alice_k/w/trimming-quality-control-and-megahit and run the workflow.
+   ![image](https://github.com/zerotook/Assembly/assets/102132762/66bd4711-a40c-4423-b2d5-c8e7e6d2e810)
+4. Run the workflow with your files.
+5. QC Reports for trimmed R1/R2 and assembled contigs files will be generated after you run the workflow.
+
+# ARGsOAP v3.2.0
+1. Login to your H2C using
+```
+ssh youraccountname@hoffman2.idre.ucla.edu
+```
+To keep your ssh session alive, you can use
+```
+ssh -o ServerAliveInterval=60 youraccountname@hoffman2.idre.ucla.edu
+```
+2. Request
+```
+qrsh -l h_data=16G,h_rt=5:00:00 -pe shared 12\
+```
