@@ -21,15 +21,25 @@ Workflow for a shotgun Metagenomic Seuqncing:
 5. QC Reports for trimmed R1/R2 and assembled contigs files will be generated after you run the workflow.
 
 # ARGsOAP v3.2.0
-1. Login to your H2C using
+1. Login to your H2C using  
 ```
 ssh youraccountname@hoffman2.idre.ucla.edu
 ```
-To keep your ssh session alive, you can use
+  To keep your ssh session alive, you can use
 ```
 ssh -o ServerAliveInterval=60 youraccountname@hoffman2.idre.ucla.edu
 ```
-2. Request
+2. Using compute nodes to request interactive sessions, for example  
 ```
-qrsh -l h_data=16G,h_rt=5:00:00 -pe shared 12\
+qrsh -l h_data=8G,h_rt=8:00:00 -pe shared 8
 ```
+  More detail about compute nodes can be found at https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html.  
+3. Install ARGsOAP (source - https://github.com/xinehc/args_oap, video instruction: https://smile.hku.hk/static/args/tools/HowToUseVersion3_2.mp4)  
+```
+module load anaconda3
+conda create -n args_oap -c bioconda -c conda-forge args_oap
+conda activate args_oap
+```
+4. Upload your assembled file to your desired input folder, run stage one
+```
+args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
