@@ -44,3 +44,9 @@ conda activate args_oap
 4. Upload your assembled file to your desired input folder, run stage one
 ```
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
+```
+5. Run stage two
+```
+args_oap stage_two -i youroutputfoldername -t 20
+```
+  cd to your output folder to check outputs after the stages.
