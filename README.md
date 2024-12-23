@@ -50,3 +50,10 @@ args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
 args_oap stage_two -i youroutputfoldername -t 20
 ```
   cd to your output folder to check outputs after the stages.
+
+# MetaCompare 2.0
+Web Service: http://metacompare.cs.vt.edu/
+Git Source: https://github.com/minoh0201/MetaCompare
+
+
+
