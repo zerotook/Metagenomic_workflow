@@ -46,7 +46,8 @@ for assembled file
 ```
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
 ```
-for unassembled pair end reads: download fastq.gz file to your H2C SCRATCH folder using command '''wget''', rename as _R1.fq.gz and _R2.fq.gz
+for unassembled pair end reads: download your trimmed fastq.gz file to your H2C SCRATCH folder using command wget, rename as _R1.fq.gz and _R2.fq.gz
+![image](https://github.com/user-attachments/assets/2481236e-73cf-4f7e-a606-96c586fef2c8)
 ```
 args_oap stage_one -i /u/scratch/y/yuwei/ARGsOAP -o /u/scratch/y/yuwei/ARGsOAP/output -f fq.gz -t 20
 ```
