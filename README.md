@@ -13,7 +13,7 @@ Workflow for a shotgun Metagenomic Seuqncing:
 ![image](https://github.com/zerotook/Assembly/assets/102132762/2c2cc0cf-dc43-43a4-8c42-dd2dec515cde)
 
 # Galaxy - trim with Trimmomatic, assemble with MEGAHIT, and QC
-To understand assemble process, check https://www.youtube.com/watch?v=RcYXTpNS_XU
+To help understand assemble process, check https://www.youtube.com/watch?v=RcYXTpNS_XU
 1. Go to www.usegalaxy.org and create an account.
 2. Create a history and upload your paired end fastq reads (each sample gets two files: R1 and R2).
 3. Go to Workflow Tab, import workflow through this url: https://usegalaxy.org/u/alice_k/w/trimming-quality-control-and-megahit and run the workflow.
@@ -34,33 +34,30 @@ ssh -o ServerAliveInterval=60 youraccountname@hoffman2.idre.ucla.edu
 ```
 qrsh -l h_data=8G,h_rt=8:00:00 -pe shared 8
 ```
-  More detail about compute nodes can be found at https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html.  
-3. Install ARGsOAP (source - https://github.com/xinehc/args_oap, video instruction - https://smile.hku.hk/static/args/tools/HowToUseVersion3_2.mp4)  
+- More detail about compute nodes can be found at https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html.
+  
+3. Install ARGsOAP ([git source](https://github.com/xinehc/args_oap), [video instruction](https://smile.hku.hk/static/args/tools/HowToUseVersion3_2.mp4))
 ```
 module load anaconda3
 conda create -n args_oap -c bioconda -c conda-forge args_oap
 conda activate args_oap
 ```
-4. Upload your assembled file to your desired input folder, run stage one
-for assembled file
+4. Upload your assembled file to your desired input folder, run stage one.
 ```
+#for assembled file:
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
-```
-for unassembled pair end reads in fastq gzip format: download your trimmed fastq.gz file to your H2C SCRATCH folder using command wget, rename as _R1.fq.gz and _R2.fq.gz
-  ![]![image](https://github.com/user-attachments/assets/2481236e-73cf-4f7e-a606-96c586fef2c8)
-```
-args_oap stage_one -i /u/scratch/y/yuwei/ARGsOAP -o /u/scratch/y/yuwei/ARGsOAP/output -f fq.gz -t 20
+
+#for unassembled pair end reads in fastq gzip format:
+#download your trimmed fastq.gz file from [galaxy](www.usegalaxy.org) using wget, rename as _R1.fq.gz and _R2.fq.gz
+args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fq.gz -t 20
 ```
 5. Run stage two
 ```
 args_oap stage_two -i youroutputfoldername -t 20
 ```
-  cd to your output folder to check outputs after the stages.
-
-    for help information
-    ```
-    args_oap stage_one/two -h
-    ```
+6. cd to your output folder to check outputs after the stages.
+ 
+- for help information `args_oap stage_one/two -h`
 
 # MetaCompare 2.0
 Web Service: http://metacompare.cs.vt.edu/
@@ -303,3 +300,4 @@ pip install numpy
   649  logout
 
 
+The provided code is designed for Windows systems. Mac users may need to modify the code to ensure compatibility with the system.
