@@ -35,7 +35,7 @@ ssh -o ServerAliveInterval=60 youraccountname@hoffman2.idre.ucla.edu
 qrsh -l h_data=8G,h_rt=8:00:00 -pe shared 8
 ```
   More detail about compute nodes can be found at https://www.hoffman2.idre.ucla.edu/Using-H2/Computing/Computing.html.  
-3. Install ARGsOAP (source - https://github.com/xinehc/args_oap, video instruction: https://smile.hku.hk/static/args/tools/HowToUseVersion3_2.mp4)  
+3. Install ARGsOAP (source - https://github.com/xinehc/args_oap, video instruction - https://smile.hku.hk/static/args/tools/HowToUseVersion3_2.mp4)  
 ```
 module load anaconda3
 conda create -n args_oap -c bioconda -c conda-forge args_oap
@@ -47,7 +47,7 @@ for assembled file
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
 ```
 for unassembled pair end reads in fastq gzip format: download your trimmed fastq.gz file to your H2C SCRATCH folder using command wget, rename as _R1.fq.gz and _R2.fq.gz
-![image](https://github.com/user-attachments/assets/2481236e-73cf-4f7e-a606-96c586fef2c8)![]
+  ![image](https://github.com/user-attachments/assets/2481236e-73cf-4f7e-a606-96c586fef2c8)
 ```
 args_oap stage_one -i /u/scratch/y/yuwei/ARGsOAP -o /u/scratch/y/yuwei/ARGsOAP/output -f fq.gz -t 20
 ```
