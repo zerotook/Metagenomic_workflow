@@ -61,7 +61,7 @@ args_oap stage_two -i youroutputfoldername -t 20
 
 # MetaCompare 2.0
 Web Service: http://metacompare.cs.vt.edu/
-Git Source: https://github.com/minoh0201/MetaCompare
+Git Source: https://github.com/mrumi/MetaCompare2.0
 pip install numpy
   415  pip install pandas
   416  pip install pandas --upgrade pip
