@@ -60,49 +60,58 @@ args_oap stage_two -i youroutputfoldername -t 20
 - for help information `args_oap stage_one/two -h`
 
 # MetaCompare 2.0
-Web Service: http://metacompare.cs.vt.edu/
-Git Source: https://github.com/mrumi/MetaCompare2.0
-pip install numpy
-  415  pip install pandas
-  416  pip install pandas --upgrade pip
-  417  pip install biopython
-  418  module load python 3.8
-  419  module load python/3.9.6
-  420  pip install numpy
-  421  pip install --upgrade pip
-  422  pip install pandas
-  423  pip install biopython
-  424  pip install pprodigal
-  425  # downloading the tool
-  426  wget http://github.com/bbuchfink/diamond/releases/download/v2.1.9/diamond-linux64.tar.gz
-  427  tar xzf diamond-linux64.tar.gz
-  428  # creating a diamond-formatted database file
-  429  ./diamond makedb --in reference.fasta -d reference
-  430  # running a search in blastp mode
-  431  ./diamond blastp -d reference -q queries.fasta -o matches.tsv
-  432  # running a search in blastx mode
-  433  ./diamond blastx -d reference -q reads.fasta -o matches.tsv
-  434  # downloading and using a BLAST database
-  435  update_blastdb.pl --decompress --blastdb_version 5 swissprot
-  436  ./diamond prepdb -d swissprot
-  437  ./diamond blastp -d swissprot -q queries.fasta -o matches.tsv
-  438  ls
-  439  wget https://mmseqs.com/latest/mmseqs-linux-avx2.tar.gz; tar xvfz mmseqs-linux-avx2.tar.gz; export PATH=$(pwd)/mmseqs/bin/:$PATH
-  440  ls
-  441  module load anaconda
-  442  module load anaconda3
-  443  conda install -c anaconda numpy
-  444  ~$ git clone https://github.com/mrumi/MetaCompare2.0.git
-  445  git clone https://github.com/mrumi/MetaCompare2.0.git
-  446  ls
-  447  cd MetaCompare2.0/
-  448  ls
-  449  wget https://zenodo.org/api/records/10626079/files/metacmpDB.tar.gz/content
-  450  ls
-  451  mv content metacmpDB.tar.gz
-  452  ls
-  453  MetaCompare2.0$ tar -zxvf metacmpDB.tar.gz
-  454  tar -zxvf metacmpDB.tar.gz
+Web Service: http://metacompare.cs.vt.edu/  
+Git Source: https://github.com/mrumi/MetaCompare2.0  
+1. Installation:
+* Python3 environment preparation\
+  `module load python/3.9.6`\
+  `pip install numpy`\
+  `pip install pandas`\
+  `pip install biopython`\
+  `pip install pprodigal`\
+    *could try `pip install --upgrade pip` if there's error when pip install
+* Download tools
+  * [Diamond](https://github.com/bbuchfink/diamond)
+  ```
+  # downloading the tool
+  wget http://github.com/bbuchfink/diamond/releases/download/v2.1.9/diamond-linux64.tar.gz
+  tar xzf diamond-linux64.tar.gz
+  # creating a diamond-formatted database file\
+  ./diamond makedb --in reference.fasta -d reference
+  # running a search in blastp mode
+  ./diamond blastp -d reference -q queries.fasta -o matches.tsv
+  # running a search in blastx mode
+  ./diamond blastx -d reference -q reads.fasta -o matches.tsv
+  # downloading and using a BLAST database
+  update_blastdb.pl --decompress --blastdb_version 5 swissprot
+  ./diamond prepdb -d swissprot
+  ./diamond blastp -d swissprot -q queries.fasta -o matches.tsv
+  ```
+  * [MMseqs2](https://github.com/soedinglab/MMseqs2)
+  ```
+  wget https://mmseqs.com/latest/mmseqs-linux-avx2.tar.gz; tar xvfz mmseqs-linux-avx2.tar.gz; export PATH=$(pwd)/mmseqs/bin/:$PATH
+  ```
+* Install MetaCompare 2.0\
+**Step 1:** Change the current working directory to the location where you want the cloned `MetaCompare2.0` directory to be made.\
+**Step 2:** Clone the repository using git command and move to code directory
+ ```
+ module load anaconda3
+ conda install -c anaconda numpy
+ git clone https://github.com/mrumi/MetaCompare2.0.git
+```
+**Step 3:** Downloading the database using the following command
+```
+wget https://zenodo.org/api/records/10626079/files/metacmpDB.tar.gz/content
+# Rename that file
+mv content metacmpDB.tar.gz
+# Uncompress the database before using
+tar -zxvf metacmpDB.tar.gz
+```
+
+You can see detailed description for command line options by using `-h` option.
+```
+python metacompare.py -h
+```
   455  python metacompare.py -c S1.fa
   456  module load python/3.9.6
   457  python metacompare.py -c S1.fa
