@@ -62,41 +62,20 @@ args_oap stage_two -i youroutputfoldername -t 20
 # MetaCompare 2.0
 Web Service: http://metacompare.cs.vt.edu/  
 Git Source: https://github.com/mrumi/MetaCompare2.0  
-1. Installation:
-* Python3 environment preparation\
-  `module load python/3.9.6`\
-  `pip install numpy`\
-  `pip install pandas`\
-  `pip install biopython`\
-  `pip install pprodigal`\
-    *could try `pip install --upgrade pip` if there's error when pip install
-* Download tools
-  * [Diamond](https://github.com/bbuchfink/diamond)
-  ```
-  # downloading the tool
-  wget http://github.com/bbuchfink/diamond/releases/download/v2.1.9/diamond-linux64.tar.gz
-  tar xzf diamond-linux64.tar.gz
-  # creating a diamond-formatted database file\
-  ./diamond makedb --in reference.fasta -d reference
-  # running a search in blastp mode
-  ./diamond blastp -d reference -q queries.fasta -o matches.tsv
-  # running a search in blastx mode
-  ./diamond blastx -d reference -q reads.fasta -o matches.tsv
-  # downloading and using a BLAST database
-  update_blastdb.pl --decompress --blastdb_version 5 swissprot
-  ./diamond prepdb -d swissprot
-  ./diamond blastp -d swissprot -q queries.fasta -o matches.tsv
-  ```
-  * [MMseqs2](https://github.com/soedinglab/MMseqs2)
-  ```
-  wget https://mmseqs.com/latest/mmseqs-linux-avx2.tar.gz; tar xvfz mmseqs-linux-avx2.tar.gz; export PATH=$(pwd)/mmseqs/bin/:$PATH
-  ```
-* Install MetaCompare 2.0\
-**Step 1:** Change the current working directory to the location where you want the cloned `MetaCompare2.0` directory to be made.\
-**Step 2:** Clone the repository using git command and move to code directory
+1. Install MetaCompare 2.0 and alignment tools
+**Step 1:** Change the current working directory to the location where you want the cloned `MetaCompare2.0` directory to be made, and run the following code to install required Python packages and alignment tools\
  ```
+# install necessary packages and alignments
  module load anaconda3
+ conda create -n MetaCompare
+ conda activate MetaCompare
  conda install -c anaconda numpy
+ conda install -c anaconda pandas
+ conda install -c anaconda biopython
+ conda install -c anaconda pprodigal
+```
+**Step 2:** Clone the repository using git command and move to code directory
+```
  git clone https://github.com/mrumi/MetaCompare2.0.git
 ```
 **Step 3:** Downloading the database using the following command
@@ -107,206 +86,17 @@ mv content metacmpDB.tar.gz
 # Uncompress the database before using
 tar -zxvf metacmpDB.tar.gz
 ```
-
+2. Running MetaCompare 2.0
+```
+python metacompare.py -c S1.fa
+#modify S1.fa to your assembled file name
+```
 You can see detailed description for command line options by using `-h` option.
 ```
 python metacompare.py -h
 ```
-  455  python metacompare.py -c S1.fa
-  456  module load python/3.9.6
-  457  python metacompare.py -c S1.fa
-  458  pip install biopython
-  459  pip install pandas
-  460  pip install pprodigal
-  461  python metacompare.py -c S1.fa
-  462  --no-warn-script-location
-  463  nano ~/.bashrc
-  464  cd $SCRATCH
-  465  ls
-  466  cd MetaCompare2.0/
-  467  ls
-  468  module load python/3.9.6
-  469  python metacompare.py -c S1.fa
-  470  pip install pprodigal
-  471  module load python/3.9
-  472  python metacompare.py -c S1.fa
-  473  echo $PATH
-  474  export PATH=$PATH:/u/home/y/yuwei/.local/bin
-  475  source ~/.bashrc
-  476  ls
-  477  cd $SCRATCH
-  478  ls
-  479  cd MetaCompare2.0/
-  480  ls
-  481  python metacompare.py -c S1.fa
-  482  module load python/3.9.65
-  483  module load python/3.9.6
-  484  ls
-  485  python metacompare.py -c S1.fa
-  486  export PATH=$PATH:/u/home/y/yuwei/.local/bin
-  487  python metacompare.py -c S1.fa
-  488  echo $PATH
-  489  export PATH=$PATH:/u/scratch/y/yuwei
-  490  which diamond
-  491  python metacompare.py -c S1.fa
-  492  which prodigal
-  493  wget https://github.com/hyattpd/Prodigal/archive/v2.6.1.tar.gz
-  494  ls
-  495  tar xzf v2.6.1.tar.gz
-  496  ls
-  497  cd Prodigal-2.6.1/
-  498  ls
-  499  make install
-  500  ./prodigal -h
-  501  export PATH=/u/scratch/y/yuwei/MetaCompare2.0/Prodigal-2.6.1/:$PATH
-  502  ls
-  503  cd ..
-  504  ls
-  505  python metacompare.py -c S1.fa
-  506  ls
-  507  cd ..
-  508  module load anaconda3
-  509  conda install -c anaconda numpy
-  510  conda create -n MetaCompare
-  511  conda activate MetaCompare2.0/
-  512  conda activate MetaCompare2.0
-  513  conda activate MetaCompare
-  514  conda install -c anaconda numpy
-  515  conda install -c anaconda pandas
-  516  conda install -c anaconda biopython
-  517  conda install -c anaconda pprodigal
-  518  swapon --show
-  519  free -h
-  520  free -m
-  521  conda install -c anaconda pprodigal
-  522  logout
-  523  cd $SCRATCH
-  524  module load python/3.9.6
-  525  ls
-  526  cd MetaCompare2.0/
-  527  ls
-  528  python metacompare.py -c S1.fa
-  529  module load anaconda3
-  530  ls
-  531  conda activate MetaCompare
-  532  ls
-  533  conda install -c bioconda pprodigal
-  534  conda list
-  535  conda install -c bioconda diamond=0.9.14
-  536  conda install -c bioconda mmseqs2
-  537  python metacompare.py -c S1.fa
-  538  python metacompare.py -h
-  539  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135b61348dcf3a9ce04/display?to_ext=fasta
-  540  python metacompare.py -c MI_1F.fa
-  541  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135c8b1ae6a0ab9de5a/display?to_ext=fasta
-  542  rm display\?to_ext\=fasta MI_2F.fa
-  543  ls
-  544  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135c8b1ae6a0ab9de5a/display?to_ext=fasta
-  545  python metacompare.py -c MI_2F.fa
-  546  which pprodigal
-  547  python metacompare.py -c S1.fa
-  548  ls
-  549  wget http://github.com/bbuchfink/diamond/releases/download/v2.1.9/diamond-linux64.tar.gz
-  550  tar xzf diamond-linux64.tar.gz
-  551  ls
-  552  wget https://mmseqs.com/latest/mmseqs-linux-sse41.tar.gz; tar xvfz mmseqs-linux-sse41.tar.gz; export PATH=$(pwd)/mmseqs/bin/:$PATH
-  553  ls
-  554  python metacompare.py -c S1.fa
-  555  export PATH=$PATH:/u/scratch/y/yuwei/MetaCompare2.0
-  556  which diamond
-  557  python metacompare.py -c S1.fa
-  558  qrsh
-  559  qrsh -l h_data=8G,h_rt=3:00:00 -pe shared 12
-  560  qrsh -l h_data=8G,h_rt=6:00:00 -pe shared 12
-  561  history
-  562  qrsh -l h_rt=3:00:00,h_data=8G pe shared -12
-  563  qrsh -l h_rt=3:00:00,h_data=8G -pe shared 12
-  564  ls
-  565  qrsh -l h_rt=3:00:00,h_data=8G -pe shared 12
-  566  qrsh -l h_rt=3:00:00,h_data=8G
-  567  $SCRATCH/
-  568  ls
-  569  cd $SCRATCH/
-  570  ls
-  571  cd MetaCompare2.0/
-  572  ls
-  573  module load anaconda3
-  574  conda activate MetaCompare
-  575  ls
-  576  qrsh -l h_rt=3:00:00,h_data=8G -pe shared 12
-  577  qrsh -l h_rt=3:00:00,h_data=8G
-  578  ls
-  579  cd $SCRATCH/
-  580  module load anaconda3
-  581  conda activate MetaCompare
-  582  l
-  583  cd MetaCompare2.0/
-  584  ls
-  585  python metacompare.py -c MI_2F.fa
-  586  qrsh -l h_rt=3:00:00,h_data=16G -pe shared 8
-  587  cd $SCRATCH
-  588  ls
-  589  cd MetaCompare2.0/
-  590  vim myscript.sh
-  591  ls
-  592  vi myscript.sh
-  593  chmod +x myscript.sh
-  594  ./myscript.sh
-  595  vim myscript.sh
-  596  qsub myscript.sh
-  597  myjobs
-  598  logout
-  599  cd $SCRATCH
-  600  ls
-  601  cd
-  602  ls
-  603  cd $SCRATCH
-  604  ls
-  605  cd MetaCompare2.0/
-  606  ls
-  607  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135d1fc4642490350c3/display?to_ext=fasta
-  608  wget https://usegalaxy.org/api/datasets/f9cad7b01a4721356b4029805aaffdf3/display?to_ext=fasta
-  609  wget https://usegalaxy.org/api/datasets/f9cad7b01a47213594bb4226f6148535/display?to_ext=fasta
-  610  wget https://usegalaxy.org/api/datasets/f9cad7b01a4721351332bac7b245ef68/display?to_ext=fasta
-  611  wget https://usegalaxy.org/api/datasets/f9cad7b01a4721354aa0c32358fa3e95/display?to_ext=fasta
-  612  wget https://usegalaxy.org/api/datasets/f9cad7b01a47213503c2db9483a4f4b4/display?to_ext=fasta
-  613  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135979920cb475e299d/display?to_ext=fasta
-  614  wget https://usegalaxy.org/api/datasets/f9cad7b01a4721351ae8262eb36addd9/display?to_ext=fasta
-  615  wget https://usegalaxy.org/api/datasets/f9cad7b01a472135fae713bd1b4a7486/display?to_ext=fasta
-  616  vim myscript.sh
-  617  ls
-  618  cd
-  619  $SCRATCH
-  620  cd $SCRATCH
-  621  ls
-  622  cd MetaCompare2.0/
-  623  qsub myscript.sh
-  624  vim myscript.sh
-  625  qsub myscript.sh
-  626  vim myscript.sh
-  627  qsub myscript.sh
-  628  vim myscript.sh
-  629  qsub myscript.sh
-  630  vim myscript.sh
-  631  qsub myscript.sh
-  632  my jobs
-  633  myjobs
-  634  vim myscript.sh
-  635  ls
-  636  vim myscript.sh
-  637  rm myscript.sh.swp
-  638  vim myscript.sh
-  639  rm .myscript.sh.swp
-  640  vim myscript.sh
-  641  qsub myscript.sh
-  642  myjobs
-  643  vim myscript.sh
-  644  myjobs
-  645  qsub myscript.sh
-  646  vim myscript.sh
-  647  qsub myscript.sh
-  648  myjobs
-  649  logout
-
-
+ - qrsh command needed to run MetaCompare, default settings are not enough for computing purposes, for example: 
+    `qrsh -l h_rt=3:00:00,h_data=8G -pe shared 12`
+    `qrsh -l h_rt=3:00:00,h_data=16G -pe shared 8`
+ 
 The provided code is designed for Windows systems. Mac users may need to modify the code to ensure compatibility with the system.
