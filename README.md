@@ -48,7 +48,7 @@ conda activate args_oap
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fasta -t 20
 
 #for unassembled pair end reads in fastq gzip format:
-#download your trimmed fastq.gz file from [galaxy](www.usegalaxy.org) using wget, rename as _R1.fq.gz and _R2.fq.gz
+#download your trimmed fastq.gz file from www.usegalaxy.org using wget, rename as _R1.fq.gz and _R2.fq.gz
 args_oap stage_one -i yourinputfolderpath -o youroutputfoldername -f fq.gz -t 20
 ```
 5. Run stage two
@@ -63,7 +63,7 @@ args_oap stage_two -i youroutputfoldername -t 20
 Web Service: http://metacompare.cs.vt.edu/  
 Git Source: https://github.com/mrumi/MetaCompare2.0  
 1. Install MetaCompare 2.0 and alignment tools
-**Step 1:** Change the current working directory to the location where you want the cloned `MetaCompare2.0` directory to be made, and run the following code to install required Python packages and alignment tools\
+**Step 1:** Change the current working directory to the location where you want the cloned `MetaCompare2.0` directory to be made, and run the following code to install required Python packages and alignment tools
  ```
 # install necessary packages and alignments
  module load anaconda3
