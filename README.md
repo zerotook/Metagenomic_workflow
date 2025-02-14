@@ -88,13 +88,19 @@ tar -zxvf metacmpDB.tar.gz
 ```
 2. Running MetaCompare 2.0
 ```
-python metacompare.py -c S1.fa
+python metacompare.py -c S1.fa -t 64 -b 0
 #modify S1.fa to your assembled file name
 ```
-You can see detailed description for command line options by using `-h` option.
+Your final output will be like
+![image](https://github.com/user-attachments/assets/a83784a1-1bc4-4c76-982b-f40bfc89be7d)
+S1_out.txt will contain the final computed risk scores.
+
+- You can see detailed description for command line options by using `-h` option.
 ```
 python metacompare.py -h
 ```
+![image](https://github.com/user-attachments/assets/88ed2ebf-1716-436c-ad5f-3a4073239c80)
+
  - qrsh command needed to run MetaCompare, default settings are not enough for computing purposes, for example: 
     `qrsh -l h_rt=3:00:00,h_data=8G -pe shared 12`
     `qrsh -l h_rt=3:00:00,h_data=16G -pe shared 8`
