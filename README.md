@@ -19,7 +19,7 @@ To help understand assemble process, check https://www.youtube.com/watch?v=RcYXT
 3. Go to Workflow Tab, import workflow through this url: https://usegalaxy.org/u/alice_k/w/trimming-quality-control-and-megahit and run the workflow.
    ![image](https://github.com/zerotook/Assembly/assets/102132762/66bd4711-a40c-4423-b2d5-c8e7e6d2e810)
 4. Run the workflow with your files.
-5. QC Reports for trimmed R1/R2 and assembled contigs files will be generated after you run the workflow.
+5. QC Reports for trimmed R1/R2 and assembled contigs files (fasta) will be generated after you run the workflow.
 
 # ARGsOAP v3.2.0
 1. Login to your H2C using  
