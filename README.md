@@ -12,7 +12,7 @@ Workflow for a shotgun Metagenomic Seuqncing:
          Taxonomy annotation/ PCA and NMDS analyses/ Antibiotic-Resistant Gene Distributions/ etc.
 ![image](https://github.com/zerotook/Assembly/assets/102132762/2c2cc0cf-dc43-43a4-8c42-dd2dec515cde)
 
-# Galaxy - trim with Trimmomatic, assemble with MEGAHIT, and QC
+# Galaxy: trim with Trimmomatic, assemble with MEGAHIT, and QC
 To help understand assemble process, check https://www.youtube.com/watch?v=RcYXTpNS_XU
 1. Go to www.usegalaxy.org and create an account.
 2. Create a history and upload your paired end fastq reads (each sample gets two files: R1 and R2).
@@ -106,3 +106,12 @@ python metacompare.py -h
     `qrsh -l h_rt=3:00:00,h_data=16G -pe shared 8`
  
 The provided code is designed for Windows systems. Mac users may need to modify the code to ensure compatibility with the system.
+
+
+# NMDC-EDGE: Bacterial Community (Kraken2)
+1. Go to https://nmdc-edge.org/user/ and create an account.
+2. Upload your FASTQ files to run the workflow.
+3. Download report output and upload to Galaxy for diversity further analysis.
+![image](https://github.com/user-attachments/assets/a0c1da86-2d36-4148-93a6-12fd9147f33b)
+
+
