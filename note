@@ -1,5 +1,6 @@
 # step 1 trim to fastp
 run sourceapp.py
+nohup python /u/scratch/y/yuwei/SourceApp/pipelines/sourceapp.py -i /u/scratch/y/yuwei/SourceApp/input/3F_R1.fastq.gz,/u/scratch/y/yuwei/SourceApp/input/3F_R2.fastq.gz -o /u/scratch/y/yuwei/SourceApp/output4/ -d /u/scratch/y/yuwei/SourceApp/databases/ -t 24 --use-geq --aggregate-human > sourceapp.log 2>&1 &
 # step 2 produce gep.txt
 run_microbe_census.py -v -t 4 -n 1000000 /u/scratch/y/yuwei/SourceApp/output1/reads.1.fastq,/u/scratch/y/yuwei/SourceApp/output1/reads.2.fastq geq.txt
 # step 3 map
