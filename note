@@ -1,0 +1,11 @@
+# step 1 trim to fastp
+run sourceapp.py
+# step 2 produce gep.txt
+run_microbe_census.py -v -t 4 -n 1000000 /u/scratch/y/yuwei/SourceApp/output1/reads.1.fastq,/u/scratch/y/yuwei/SourceApp/output1/reads.2.fastq geq.txt
+# step 3 map
+bwa mem -t 24 /u/scratch/y/yuwei/SourceApp/databases/database /u/scratch/y/yuwei/SourceApp/output2/reads.1.fastq /u/scratch/y/yuwei/SourceApp/output2/reads.2.fastq | samtools sort -@ 24 -o /u/scratch/y/yuwei/SourceApp/output2/mappings.bam
+# step 4 filtering
+coverm genome   -b /u/scratch/y/yuwei/SourceApp/output2/mappings.bam   --genome-definition /u/scratch/y/yuwei/SourceApp/databases/gdef.txt   --min-read-percent-identity 93   --min-read-aligned-percent 70   --output-format dense   -t 24   -m trimmed_mean covered_bases variance   -o /u/scratch/y/yuwei/SourceApp/output2/mappings_filtered.txt   --trim-min 0 --trim-max 100
+# step 5 generating results
+python -c "import pandas as pd; d='/u/scratch/y/yuwei/SourceApp/output2'; db='/u/scratch/y/yuwei/SourceApp/databases'; df=pd.read_csv(f'{d}/mappings_filtered.txt',sep='\t'); sd=pd.read_csv(f'{db}/sources.txt',sep='\t'); sd=sd.set_index('genome')['source'].to_dict(); geq=float(open(f'{d}/geq.txt').readlines()[12].split()[1]); out=[]; [out.append([s,df[df['Genome'].isin([g for g,v in sd.items() if v==s])].iloc[:,1].sum()/geq,(df[df['Genome'].isin([g for g,v in sd.items() if v==s])].iloc[:,1]>0).sum(),len([g for g,v in sd.items() if v==s])]) for s in sorted(set(sd.values()))]; pd.DataFrame(out,columns=['Source','Fraction','Detected Genomes','Total Genomes']).to_csv(f'{d}/summary.csv',index=False)"
+cat /u/scratch/y/yuwei/SourceApp/output2/summary.csv
