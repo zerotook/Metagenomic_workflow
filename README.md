@@ -113,5 +113,6 @@ The provided code is designed for Windows systems. Mac users may need to modify 
 2. Upload your FASTQ files to run the workflow.
 3. Download report output and upload to Galaxy for diversity further analysis.
 ![image](https://github.com/user-attachments/assets/a0c1da86-2d36-4148-93a6-12fd9147f33b)
+- or upload your report file to Pavian (https://github.com/fbreitwieser/pavian) for further analysis.
 
 
