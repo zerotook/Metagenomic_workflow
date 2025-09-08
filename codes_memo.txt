@@ -1,0 +1,271 @@
+blastp database: SARG full 
+ makeblastdb -in 1.SARG_v3.1.2_20220829_Full_database.fasta -dbtype prot -out SARG_DB
+
+blastp -query /u/scratch/y/yuwei/ORF_finding/6F_ORFs.faa -db SARG_DB -out /u/scratch/y/yuwei/ORF_finding/blastp_9F.tsv -evalue 1e-5 -outfmt 6
+  872  qrsh -l h_rt=4:00:00,h_data=8G -pe shared 12
+  873  cd $SCRATCH
+  874  ls
+  875  cd ORF_finding/
+  876  cd ..
+  877  blastp -query /u/scratch/y/yuwei/ORF_finding/9F_ORFs.faa -db SARG_DB -out /u/scratch/y/yuwei/ORF_finding/blastp_9F.tsv -evalue 1e-5 -outfmt 6
+  878  module load anaconda3
+  879  conda activate MetaCompare
+  880  blastp -query /u/scratch/y/yuwei/ORF_finding/9F_ORFs.faa -db SARG_DB -out /u/scratch/y/yuwei/ORF_finding/blastp_9F.tsv -evalue 1e-5 -outfmt 6
+666  conda activate coverm_env
+  667  coverm_demo]$ coverm genome --coupled 1F.R1.fq.gz 1F.R2.fq.gz --genome-fasta-files 1F_ACC_contigs.fa -t 8 -m relative_abundance covered_fraction -o 1F_coverm.tsv
+  668  cd ..
+  669  cd coverm_demo/
+  670  cd ..
+  671  cd ORF_finding/
+  672  coverm genome --coupled 1F.R1.fq.gz 1F.R2.fq.gz --genome-fasta-files 1F_ACC_contigs.fa -t 8 -m relative_abundance covered_fraction -o 1F_coverm.tsv
+
+  conda install coverm
+  619  coverm shell-completion --output-file coverm --shell bash
+  620  mv coverm /etc/bash_completion.d/
+  621  mkdir coverm_domo
+  622  wget https://raw.githubusercontent.com/wwood/CoverM/refs/heads/main/demo/sample_1.1.fq.gz
+  623  wget https://raw.githubusercontent.com/wwood/CoverM/refs/heads/main/demo/sample_1.2.fq.gz
+  624  wget https://raw.githubusercontent.com/wwood/CoverM/refs/heads/main/demo/genome_1.fna
+  625  ls
+  626  cd coverm_demo/
+
+
+
+prodigal -i /u/scratch/y/yuwei/1F.fasta -o 1F_ORFs.gbk -a 1F_ORFs.faa -p meta
+nohup blastp -query /u/scratch/y/yuwei/S1_ORFs.faa -db SARG_DB -out /u/scratch/y/yuwei/ORF_finding/blastp_S1.tsv -evalue 1e-5 -outfmt 6
+
+from Bio import SeqIO
+import pandas as pd
+
+# Load BLASTP output
+blast_df = pd.read_csv('/u/scratch/y/yuwei/ORF_finding/blastp_S1.tsv',
+                       sep='\t', header=None)
+
+blast_df.columns = ['query_id', 'subject_id', 'identity', 'align_len', 'mismatches',
+                    'gap_opens', 'q_start', 'q_end', 's_start', 's_end',
+                    'evalue', 'bit_score']
+
+# Load query sequences and lengths
+fasta_file = '/u/scratch/y/yuwei/ORF_finding/S1_ORFs.faa'
+query_lengths = {record.id: len(record.seq) for record in SeqIO.parse(fasta_file, 'fasta')}
+
+# Add query lengths and calculate query coverage
+blast_df['query_len'] = blast_df['query_id'].map(query_lengths)
+blast_df['query_cov'] = blast_df['align_len'] / blast_df['query_len']
+
+# Apply filtering: identity ≥ 80%, query coverage ≥ 70%
+filtered_df = blast_df[(blast_df['identity'] >= 80) &
+                       (blast_df['query_cov'] >= 0.7)]
+
+# Save filtered results
+filtered_df.to_csv('/u/scratch/y/yuwei/ORF_finding/blastp_S1_filtered.tsv', sep='\t', index=False)
+
+print(f"Filtered results saved. {filtered_df.shape[0]} hits passed filtering criteria.")
+
+
+#!/u/local/apps/python/3.8.0/bin/python3
+
+import pandas as pd
+
+# Path to input BLASTP filtered results (update path if needed)
+blastp_file = "/u/scratch/y/yuwei/ORF_finding/blastp_S1_filtered.tsv"
+
+# Output file for ACC list
+output_file = "/u/scratch/y/yuwei/ORF_finding/S1_ACC.txt"
+
+# Load filtered BLASTP output
+df = pd.read_csv(blastp_file, sep='\t')
+
+# Extract contig name by removing the last "_<number>" from ORF ID
+df['contig_id'] = df['query_id'].str.replace(r'_\d+$', '', regex=True)
+
+# Get unique contig IDs with ARGs
+acc_list = df['contig_id'].unique()
+
+# Save ACCs to file
+pd.Series(acc_list).to_csv(output_file, index=False, header=False)
+
+print(f"✅ Total ACCs found: {len(acc_list)} and saved to {output_file}")
+from Bio import SeqIO
+
+acc_list_file = "/u/scratch/y/yuwei/ORF_finding/S1_ACC.txt"
+contigs_fasta = "/u/scratch/y/yuwei/ORF_finding/S1.fa"
+output_fasta = "/u/scratch/y/yuwei/ORF_finding/S1_ACC_contigs.fa"
+
+# Load list of ACCs
+with open(acc_list_file) as f:
+    accs = set(line.strip() for line in f)
+
+# Filter and write matching contigs
+with open(output_fasta, "w") as out_handle:
+    for record in SeqIO.parse(contigs_fasta, "fasta"):
+        if record.id in accs:
+            SeqIO.write(record, out_handle, "fasta")
+
+
+
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 1F.R1.fq.gz 1F.R2.fq.gz --reference 1F_ACC_contigs.fa --methods tpm --output-file 1F_tpm.tsv -t 8
+[2025-05-08T06:41:25Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T06:41:25Z INFO  coverm] Writing output to file: 1F_tpm.tsv
+[2025-05-08T06:41:25Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T06:41:25Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T06:41:25Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T06:45:25Z INFO  coverm::contig] In sample '1F_ACC_contigs.fa/1F.R1.fq.gz', found 1425 reads mapped out of 58837100 total (0.00%)
+
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 2F.R1.fq.gz 2F.R2.fq.gz --reference
+ 2F_ACC_contigs.fa --methods tpm --output-file 2F_tpm.tsv -t 8
+[2025-05-08T06:55:41Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T06:55:41Z INFO  coverm] Writing output to file: 2F_tpm.tsv
+[2025-05-08T06:55:41Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T06:55:41Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T06:55:41Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T06:58:58Z INFO  coverm::contig] In sample '2F_ACC_contigs.fa/2F.R1.fq.gz', found 49727 reads mapped out of 48124286 total (0.10%)
+
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 3F.R1.fq.gz 3F.R2.fq.gz --reference
+ 3F_ACC_contigs.fa --methods tpm --output-file 3F_tpm.tsv -t 8
+[2025-05-08T06:59:58Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T06:59:58Z INFO  coverm] Writing output to file: 3F_tpm.tsv
+[2025-05-08T06:59:58Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T06:59:58Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T06:59:58Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T07:06:04Z INFO  coverm::contig] In sample '3F_ACC_contigs.fa/3F.R1.fq.gz', found 47022 reads mapped out of 92426012 total (0.05%)
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 4F.R1.fq.gz 4F.R2.fq.gz --reference
+ 4F_ACC_contigs.fa --methods tpm --output-file 4F_tpm.tsv -t 12
+[2025-05-08T07:07:22Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T07:07:22Z INFO  coverm] Writing output to file: 4F_tpm.tsv
+[2025-05-08T07:07:22Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T07:07:22Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T07:07:22Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T07:10:19Z INFO  coverm::contig] In sample '4F_ACC_contigs.fa/4F.R1.fq.gz', found 134202 reads mapped out of 44071292 total (0.30%)
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 5F.R1.fq.gz 5F.R2.fq.gz --reference
+ 5F_ACC_contigs.fa --methods tpm --output-file 5F_tpm.tsv -t 12
+[2025-05-08T07:10:50Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T07:10:50Z INFO  coverm] Writing output to file: 5F_tpm.tsv
+[2025-05-08T07:10:50Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T07:10:50Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T07:10:50Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T07:14:24Z INFO  coverm::contig] In sample '5F_ACC_contigs.fa/5F.R1.fq.gz', found 26747 reads mapped out of 52373388 total (0.05%)
+(coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 6F.R1.fq.gz 6F.R2.fq.gz --reference
+ 6F_ACC_contigs.fa --methods tpm --output-file 6F_tpm.tsv -t 12
+[2025-05-08T07:14:55Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T07:14:55Z INFO  coverm] Writing output to file: 6F_tpm.tsv
+[2025-05-08T07:14:55Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T07:14:55Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T07:14:55Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T07:18:12Z INFO  coverm::contig] In sample '6F_ACC_contigs.fa/6F.R1.fq.gz', found 57186 reads mapped out of 48800700 total (0.12%)
+
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 7F.R1.fq.gz 7F.R2.fq.gz --reference
+ 7F_ACC_contigs.fa --methods tpm --output-file 7F_tpm.tsv -t 12
+[2025-05-08T22:00:20Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T22:00:20Z INFO  coverm] Writing output to file: 7F_tpm.tsv
+[2025-05-08T22:00:20Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T22:00:21Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T22:00:21Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T22:03:14Z INFO  coverm::contig] In sample '7F_ACC_contigs.fa/7F.R1.fq.gz', found 1039491 reads mapped out of 46363764 total (2.24%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 8F.R1.fq.gz 8F.R2.fq.gz --reference
+ 8F_ACC_contigs.fa --methods tpm --output-file 8F_tpm.tsv -t 12
+[2025-05-08T22:03:53Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T22:03:53Z INFO  coverm] Writing output to file: 8F_tpm.tsv
+[2025-05-08T22:03:53Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T22:03:53Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T22:03:53Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T22:07:04Z INFO  coverm::contig] In sample '8F_ACC_contigs.fa/8F.R1.fq.gz', found 13828 reads mapped out of 50283134 total (0.03%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 9F.R1.fq.gz 9F.R2.fq.gz --reference
+ 9F_ACC_contigs.fa --methods tpm --output-file 9F_tpm.tsv -t 12
+[2025-05-08T22:07:43Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T22:07:43Z INFO  coverm] Writing output to file: 9F_tpm.tsv
+[2025-05-08T22:07:43Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T22:07:43Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T22:07:43Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T22:11:27Z INFO  coverm::contig] In sample '9F_ACC_contigs.fa/9F.R1.fq.gz', found 93172 reads mapped out of 56275404 total (0.17%)
+
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 1S.R1.fq.gz 1S.R2.fq.gz --reference
+ 1S_ACC_contigs.fa --methods tpm --output-file 1S_tpm.tsv -t 12
+[2025-05-08T22:27:04Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T22:27:04Z INFO  coverm] Writing output to file: 1S_tpm.tsv
+[2025-05-08T22:27:04Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T22:27:05Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T22:27:05Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T22:29:49Z INFO  coverm::contig] In sample '1S_ACC_contigs.fa/1S.R1.fq.gz', found 12885 reads mapped out of 42114750 total (0.03%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 2S.R1.fq.gz 2S.R2.fq.gz --reference
+ 2S_ACC_contigs.fa --methods tpm --output-file 2S_tpm.tsv -t 12
+[2025-05-08T23:11:39Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:11:39Z INFO  coverm] Writing output to file: 2S_tpm.tsv
+[2025-05-08T23:11:39Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:11:39Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+thread 'main' panicked at src/mapping_index_maintenance.rs:211:9:
+The reference specified '2S_ACC_contigs.fa' does not appear to exist
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 3S.R1.fq.gz 3S.R2.fq.gz --reference
+ 3S_ACC_contigs.fa --methods tpm --output-file 3S_tpm.tsv -t 12
+[2025-05-08T23:12:23Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:12:23Z INFO  coverm] Writing output to file: 3S_tpm.tsv
+[2025-05-08T23:12:23Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:12:24Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:12:24Z INFO  coverm] Not pre-generating minimap2 index
+  [2025-05-08T23:15:53Z INFO  coverm::contig] In sample '3S_ACC_contigs.fa/3S.R1.fq.gz', found 33549 reads mapped out of 53723530 total (0.06%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 4S.R1.fq.gz 4S.R2.fq.gz --reference
+ 4S_ACC_contigs.fa --methods tpm --output-file 4S_tpm.tsv -t 12
+[2025-05-08T23:16:45Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:16:45Z INFO  coverm] Writing output to file: 4S_tpm.tsv
+[2025-05-08T23:16:45Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:16:45Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:16:45Z INFO  coverm] Not pre-generating minimap2 index
+^[[D^[[D[2025-05-08T23:19:05Z INFO  coverm::contig] In sample '4S_ACC_contigs.fa/4S.R1.fq.gz', found 17519 reads mapped out of 36624674 total (0.05%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 5S.R1.fq.gz 5S.R2.fq.gz --reference
+ 5S_ACC_contigs.fa --methods tpm --output-file 5S_tpm.tsv -t 12
+[2025-05-08T23:24:41Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:24:41Z INFO  coverm] Writing output to file: 5S_tpm.tsv
+[2025-05-08T23:24:41Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:24:41Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:24:41Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T23:26:51Z INFO  coverm::contig] In sample '5S_ACC_contigs.fa/5S.R1.fq.gz', found 13899 reads mapped out of 33083318 total (0.04%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 6S.R1.fq.gz 6S.R2.fq.gz --reference
+ 6S_ACC_contigs.fa --methods tpm --output-file 6S_tpm.tsv -t 12
+[2025-05-08T23:27:23Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:27:23Z INFO  coverm] Writing output to file: 6S_tpm.tsv
+[2025-05-08T23:27:24Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:27:24Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:27:24Z INFO  coverm] Not pre-generating minimap2 index
+^[[2025-05-08T23:31:21Z INFO  coverm::contig] In sample '6S_ACC_contigs.fa/6S.R1.fq.gz', found 11294 reads mapped out of 62440184 total (0.02%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 8S.R1.fq.gz 8S.R2.fq.gz --reference
+ 8S_ACC_contigs.fa --methods tpm --output-file 8S_tpm.tsv -t 12
+[2025-05-08T23:31:51Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:31:51Z INFO  coverm] Writing output to file: 8S_tpm.tsv
+[2025-05-08T23:31:51Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:31:51Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:31:51Z INFO  coverm] Not pre-generating minimap2 index
+ [2025-05-08T23:34:56Z INFO  coverm::contig] In sample '8S_ACC_contigs.fa/8S.R1.fq.gz', found 3644 reads mapped out of 48249968 total (0.01%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 9S.R1.fq.gz 9S.R2.fq.gz --reference
+ 9S_ACC_contigs.fa --methods tpm --output-file 9S_tpm.tsv -t 12
+[2025-05-08T23:50:18Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-08T23:50:18Z INFO  coverm] Writing output to file: 9S_tpm.tsv
+[2025-05-08T23:50:18Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-08T23:50:18Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-08T23:50:18Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-08T23:53:58Z INFO  coverm::contig] In sample '9S_ACC_contigs.fa/9S.R1.fq.gz', found 145127 reads mapped out of 53770180 total (0.27%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 10S.R1.fq.gz 10S.R2.fq.gz --referen
+ce 10S_ACC_contigs.fa --methods tpm --output-file 10S_tpm.tsv -t 12
+[2025-05-09T00:05:03Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-09T00:05:03Z INFO  coverm] Writing output to file: 10S_tpm.tsv
+[2025-05-09T00:05:03Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-09T00:05:03Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-09T00:05:03Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-09T00:08:57Z INFO  coverm::contig] In sample '10S_ACC_contigs.fa/10S.R1.fq.gz', found 30674 reads mapped out of 59417834 total (0.05%)
+
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 10F.R1.fq.gz 10F.R2.fq.gz --referen
+ce 10F_ACC_contigs.fa --methods tpm --output-file 10F_tpm.tsv -t 12
+[2025-05-09T02:02:04Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-09T02:02:04Z INFO  coverm] Writing output to file: 10F_tpm.tsv
+[2025-05-09T02:02:04Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-09T02:02:04Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-09T02:02:04Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-09T02:04:28Z INFO  coverm::contig] In sample '10F_ACC_contigs.fa/10F.R1.fq.gz', found 29642 reads mapped out of 36604116 total (0.08%)
+(coverm_env) [yuwei@n1812 ORF_finding]$ coverm contig --coupled 11F.R1.fq.gz 11F.R2.fq.gz --referen
+ce 11F_ACC_contigs.fa --methods tpm --output-file 11F_tpm.tsv -t 12
+[2025-05-09T02:04:45Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-05-09T02:04:45Z INFO  coverm] Writing output to file: 11F_tpm.tsv
+[2025-05-09T02:04:45Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-05-09T02:04:45Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-05-09T02:04:45Z INFO  coverm] Not pre-generating minimap2 index
+[2025-05-09T02:07:48Z INFO  coverm::contig] In sample '11F_ACC_contigs.fa/11F.R1.fq.gz', found 277842 reads mapped out of 47215936 total (0.59%)
