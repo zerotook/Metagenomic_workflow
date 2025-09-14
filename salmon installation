@@ -1,0 +1,176 @@
+(base) [yuwei@n1856 ~]$ conda create -n salmon
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.14.0
+  latest version: 25.7.0
+
+Please update conda by running
+
+    $ conda update -n base -c conda-forge conda
+
+
+
+## Package Plan ##
+
+  environment location: /u/home/y/yuwei/.conda/envs/salmon
+
+
+
+Proceed ([y]/n)? y
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate salmon
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+Retrieving notices: ...working... done
+(base) [yuwei@n1856 ~]$ conda activate salmon
+(salmon) [yuwei@n1856 ~]$ conda install -n salmon -c conda-forge -c bioconda salmon
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.14.0
+  latest version: 25.7.0
+
+Please update conda by running
+
+    $ conda update -n base -c conda-forge conda
+
+
+
+## Package Plan ##
+
+  environment location: /u/home/y/yuwei/.conda/envs/salmon
+
+  added / updated specs:
+    - salmon
+
+
+The following NEW packages will be INSTALLED:
+
+  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge
+  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-2_gnu
+  boost-cpp          conda-forge/linux-64::boost-cpp-1.78.0-h2c5509c_4
+  bzip2              conda-forge/linux-64::bzip2-1.0.8-hda65f42_8
+  c-ares             conda-forge/linux-64::c-ares-1.34.5-hb9d3cd8_0
+  ca-certificates    conda-forge/noarch::ca-certificates-2025.8.3-hbd8a1cb_0
+  icu                conda-forge/linux-64::icu-73.2-h59595ed_0
+  keyutils           conda-forge/linux-64::keyutils-1.6.3-hb9d3cd8_0
+  krb5               conda-forge/linux-64::krb5-1.21.3-h659f571_0
+  libcurl            conda-forge/linux-64::libcurl-8.14.1-h332b0f4_0
+  libdeflate         conda-forge/linux-64::libdeflate-1.22-hb9d3cd8_0
+  libedit            conda-forge/linux-64::libedit-3.1.20250104-pl5321h7949ede_0
+  libev              conda-forge/linux-64::libev-4.33-hd590300_2
+  libgcc             conda-forge/linux-64::libgcc-15.1.0-h767d61c_5
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-15.1.0-h69a702a_5
+  libgff             bioconda/linux-64::libgff-2.0.0-h077b44d_3
+  libgomp            conda-forge/linux-64::libgomp-15.1.0-h767d61c_5
+  libhwloc           conda-forge/linux-64::libhwloc-2.12.1-default_h3d81e11_1000
+  libiconv           conda-forge/linux-64::libiconv-1.18-h3b78370_2
+  libjemalloc        conda-forge/linux-64::libjemalloc-5.3.0-h5888daf_1
+  liblzma            conda-forge/linux-64::liblzma-5.8.1-hb9d3cd8_2
+  liblzma-devel      conda-forge/linux-64::liblzma-devel-5.8.1-hb9d3cd8_2
+  libnghttp2         conda-forge/linux-64::libnghttp2-1.67.0-had1ee68_0
+  libssh2            conda-forge/linux-64::libssh2-1.11.1-hcf80075_0
+  libstdcxx          conda-forge/linux-64::libstdcxx-15.1.0-h8f9b012_5
+  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-15.1.0-h4852527_5
+  libxml2            pkgs/main/linux-64::libxml2-2.13.8-hfdd30dd_0
+  libzlib            conda-forge/linux-64::libzlib-1.3.1-hb9d3cd8_2
+  ncurses            conda-forge/linux-64::ncurses-6.5-h2d0b736_3
+  openssl            conda-forge/linux-64::openssl-3.5.2-h26f9b46_0
+  salmon             bioconda/linux-64::salmon-1.10.3-h45fbf2d_5
+  staden_io_lib      bioconda/linux-64::staden_io_lib-1.15.1-hfc9290b_0
+  tbb                conda-forge/linux-64::tbb-2022.2.0-hb60516a_1
+  xz                 conda-forge/linux-64::xz-5.8.1-hbcc6ac9_2
+  xz-gpl-tools       conda-forge/linux-64::xz-gpl-tools-5.8.1-hbcc6ac9_2
+  xz-tools           conda-forge/linux-64::xz-tools-5.8.1-hb9d3cd8_2
+  zlib               conda-forge/linux-64::zlib-1.3.1-hb9d3cd8_2
+  zstd               conda-forge/linux-64::zstd-1.5.7-hb8e6e7a_2
+
+
+Proceed ([y]/n)? y
+
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+Retrieving notices: ...working... done
+(salmon) [yuwei@n1856 ~]$ salmon -h
+salmon: error while loading shared libraries: libboost_iostreams.so.1.85.0: cannot open shared object file: No such file or directory
+(salmon) [yuwei@n1856 ~]$ locate libboost_iostreams
+/usr/lib64/libboost_iostreams-mt.so
+/usr/lib64/libboost_iostreams-mt.so.1.53.0
+/usr/lib64/libboost_iostreams.so
+/usr/lib64/libboost_iostreams.so.1.53.0
+(salmon) [yuwei@n1856 ~]$ conda install boost-cpp=1.85.0
+Collecting package metadata (current_repodata.json): done
+Solving environment: failed with initial frozen solve. Retrying with flexible solve.
+Solving environment: failed with repodata from current_repodata.json, will retry with next repodata source.
+Collecting package metadata (repodata.json): done
+Solving environment: done
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.14.0
+  latest version: 25.7.0
+
+Please update conda by running
+
+    $ conda update -n base -c conda-forge conda
+
+
+
+## Package Plan ##
+
+  environment location: /u/home/y/yuwei/.conda/envs/salmon
+
+  added / updated specs:
+    - boost-cpp=1.85.0
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    boost-cpp-1.85.0           |       h44aadfe_2          17 KB  conda-forge
+    libboost-1.85.0            |       hba137d9_2         2.8 MB  conda-forge
+    libboost-devel-1.85.0      |       h00ab1b0_2          40 KB  conda-forge
+    libboost-headers-1.85.0    |       ha770c72_2        13.4 MB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        16.2 MB
+
+The following NEW packages will be INSTALLED:
+
+  libboost           conda-forge/linux-64::libboost-1.85.0-hba137d9_2
+  libboost-devel     conda-forge/linux-64::libboost-devel-1.85.0-h00ab1b0_2
+  libboost-headers   conda-forge/linux-64::libboost-headers-1.85.0-ha770c72_2
+
+The following packages will be UPDATED:
+
+  boost-cpp                               1.78.0-h2c5509c_4 --> 1.85.0-h44aadfe_2
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+libboost-headers-1.8 | 13.4 MB   | ################################################################################################################################################## | 100% 
+libboost-devel-1.85. | 40 KB     | ################################################################################################################################################## | 100% 
+boost-cpp-1.85.0     | 17 KB     | ################################################################################################################################################## | 100% 
+libboost-1.85.0      | 2.8 MB    | ################################################################################################################################################## | 100% 
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+Retrieving notices: ...working... done
+(salmon) [yuwei@n1856 ~]$ salmom -h
