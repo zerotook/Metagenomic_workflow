@@ -106,6 +106,114 @@ with open(output_fasta, "w") as out_handle:
 tch/y/yuwei/ACC/6F_ORFs.fna   --out-tsv /u/scratch/y/yuwei/ACC/blastp_6F_filtered.tsv   --out-fna /u/scratch/y/yuwei/ACC/6F_ARG_ORFs.fna   --ident 80 --qcov 0.70
 [done] Filtered table: /u/scratch/y/yuwei/ACC/blastp_6F_filtered.tsv  |  ARG-like ORFs (FNA): /u/scratch/y/yuwei/ACC/6F_ARG_ORFs.fna (n=28)
 
+(salmon) [yuwei@login4 ACC]$ salmon quant -i salmon_idx_6f_ARGs -l A -1 input/6F_R1.fq.gz -2 input/6F_R2.fq.gz -p 8 --validateMappings --gcBias -o salmon_6F_ARGs --meta
+Version Server Response: Not Found
+### salmon (selective-alignment-based) v1.10.3
+### [ program ] => salmon
+### [ command ] => quant
+### [ index ] => { salmon_idx_6f_ARGs }
+### [ libType ] => { A }
+### [ mates1 ] => { input/6F_R1.fq.gz }
+### [ mates2 ] => { input/6F_R2.fq.gz }
+### [ threads ] => { 8 }
+### [ validateMappings ] => { }
+### [ gcBias ] => { }
+### [ output ] => { salmon_6F_ARGs }
+### [ meta ] => { }
+Logs will be written to salmon_6F_ARGs/logs
+[2025-09-15 05:03:08.823] [jointLog] [info] setting maxHashResizeThreads to 8
+[2025-09-15 05:03:08.823] [jointLog] [info] Fragment incompatibility prior below threshold.  Incompatible fragments will be ignored.
+[2025-09-15 05:03:08.823] [jointLog] [info] Usage of --validateMappings implies use of minScoreFraction. Since not explicitly specified, it is being set to 0.65
+[2025-09-15 05:03:08.823] [jointLog] [info] Setting consensusSlack to selective-alignment default of 0.35.
+[2025-09-15 05:03:08.823] [jointLog] [info] parsing read library format
+[2025-09-15 05:03:08.823] [jointLog] [info] There is 1 library.
+-----------------------------------------
+| Loading contig table | Time = 3.2719 ms
+-----------------------------------------
+size = 44
+-----------------------------------------
+| Loading contig offsets | Time = 4.4383 ms
+-----------------------------------------
+-----------------------------------------
+| Loading reference lengths | Time = 7.638 us
+-----------------------------------------
+[2025-09-15 05:03:08.829] [jointLog] [info] Loading pufferfish index
+[2025-09-15 05:03:08.831] [jointLog] [info] Loading dense pufferfish index.
+-----------------------------------------
+| Loading mphf table | Time = 1.3805 ms
+-----------------------------------------
+size = 8408
+Number of ones: 43
+Number of ones per inventory item: 512
+Inventory entries filled: 1
+-----------------------------------------
+| Loading contig boundaries | Time = 1.7755 ms
+-----------------------------------------
+size = 8408
+-----------------------------------------
+| Loading sequence | Time = 2.1858 ms
+-----------------------------------------
+size = 7118
+-----------------------------------------
+| Loading positions | Time = 3.4113 ms
+-----------------------------------------
+size = 8409
+-----------------------------------------
+| Loading reference sequence | Time = 1.7415 ms
+-----------------------------------------
+-----------------------------------------
+| Loading reference accumulative lengths | Time = 7.123 us
+-----------------------------------------
+[2025-09-15 05:03:08.855] [jointLog] [info] done
+[2025-09-15 05:03:08.918] [jointLog] [info] Index contained 28 targets
+[2025-09-15 05:03:08.919] [jointLog] [info] Number of decoys : 0
+
+
+
+processed 24,000,004 fragments
+hits: 585, hits per frag:  2.43989e-05
+
+
+
+
+
+
+
+[2025-09-15 05:04:30.115] [jointLog] [info] Computed 34 rich equivalence classes for further processing
+[2025-09-15 05:04:30.115] [jointLog] [info] Counted 577 total reads in the equivalence classes
+[2025-09-15 05:04:30.119] [jointLog] [info] Number of mappings discarded because of alignment score : 1,522
+[2025-09-15 05:04:30.119] [jointLog] [info] Number of fragments entirely discarded because of alignment score : 1,315
+[2025-09-15 05:04:30.119] [jointLog] [info] Number of fragments discarded because they are best-mapped to decoys : 0
+[2025-09-15 05:04:30.119] [jointLog] [info] Number of fragments discarded because they have only dovetail (discordant) mappings to valid targets : 1
+[2025-09-15 05:04:30.119] [jointLog] [warning] Only 577 fragments were mapped, but the number of burn-in fragments was set to 5000000.
+The effective lengths have been computed using the observed mappings.
+
+[2025-09-15 05:04:30.119] [jointLog] [info] Mapping rate = 0.00236472%
+
+[2025-09-15 05:04:30.119] [jointLog] [info] finished quantifyLibrary()
+[2025-09-15 05:04:30.146] [jointLog] [info] Starting optimizer
+[2025-09-15 05:04:30.168] [jointLog] [info] Marked 0 weighted equivalence classes as degenerate
+[2025-09-15 05:04:30.168] [jointLog] [info] iteration = 0 | max rel diff. = 99
+[2025-09-15 05:04:30.168] [jointLog] [info] iteration 5, adjusting effective lengths to account for biases
+[2025-09-15 05:04:30.170] [jointLog] [info] Computed expected counts (for bias correction)
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 10.7% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 10.7% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 21.4% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 25.0% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 32.1% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 50.0% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 50.0% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 57.1% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 60.7% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 67.9% of the transcripts
+[2025-09-15 05:04:30.170] [jointLog] [info] processed bias for 100.0% of the transcripts
+[2025-09-15 05:04:30.171] [jointLog] [info] iteration = 100 | max rel diff. = 0
+[2025-09-15 05:04:30.171] [jointLog] [info] Finished optimizer
+[2025-09-15 05:04:30.171] [jointLog] [info] writing output
+
+salmon index -t 6F_ARG_ORFs.fna -i salmon_idx_6f_ARGs -p 8
+
+
 (coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 1F.R1.fq.gz 1F.R2.fq.gz --reference 1F_ACC_contigs.fa --methods tpm --output-file 1F_tpm.tsv -t 8
 [2025-05-08T06:41:25Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
 [2025-05-08T06:41:25Z INFO  coverm] Writing output to file: 1F_tpm.tsv
@@ -271,4 +379,5 @@ ce 11F_ACC_contigs.fa --methods tpm --output-file 11F_tpm.tsv -t 12
 [2025-05-09T02:04:45Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
 [2025-05-09T02:04:45Z INFO  coverm] Not pre-generating minimap2 index
 [2025-05-09T02:07:48Z INFO  coverm::contig] In sample '11F_ACC_contigs.fa/11F.R1.fq.gz', found 277842 reads mapped out of 47215936 total (0.59%)
+
 
