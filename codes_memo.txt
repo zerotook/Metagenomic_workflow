@@ -102,7 +102,9 @@ with open(output_fasta, "w") as out_handle:
         if record.id in accs:
             SeqIO.write(record, out_handle, "fasta")
 
-
+(base) [yuwei@login4 ACC]$ python filter_and_subset_arg_orfs.py   --blast /u/scratch/y/yuwei/ACC/ORF/blastp_6F_arg2025test.tsv   --faa   /u/scratch/y/yuwei/ACC/6F_ORFs.faa   --fna   /u/scra
+tch/y/yuwei/ACC/6F_ORFs.fna   --out-tsv /u/scratch/y/yuwei/ACC/blastp_6F_filtered.tsv   --out-fna /u/scratch/y/yuwei/ACC/6F_ARG_ORFs.fna   --ident 80 --qcov 0.70
+[done] Filtered table: /u/scratch/y/yuwei/ACC/blastp_6F_filtered.tsv  |  ARG-like ORFs (FNA): /u/scratch/y/yuwei/ACC/6F_ARG_ORFs.fna (n=28)
 
 (coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 1F.R1.fq.gz 1F.R2.fq.gz --reference 1F_ACC_contigs.fa --methods tpm --output-file 1F_tpm.tsv -t 8
 [2025-05-08T06:41:25Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
@@ -269,3 +271,4 @@ ce 11F_ACC_contigs.fa --methods tpm --output-file 11F_tpm.tsv -t 12
 [2025-05-09T02:04:45Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
 [2025-05-09T02:04:45Z INFO  coverm] Not pre-generating minimap2 index
 [2025-05-09T02:07:48Z INFO  coverm::contig] In sample '11F_ACC_contigs.fa/11F.R1.fq.gz', found 277842 reads mapped out of 47215936 total (0.59%)
+
