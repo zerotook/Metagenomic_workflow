@@ -213,6 +213,15 @@ The effective lengths have been computed using the observed mappings.
 
 salmon index -t 6F_ARG_ORFs.fna -i salmon_idx_6f_ARGs -p 8
 
+20250916 (MetaCompare) [yuwei@n7442 ACC]$ python Extract_fa.py -f blastp_6F_filtered.tsv -a /u/scratch/y/yuwei/alr2/assemblies/6F.fasta -t 6F_ACC.txt -o 6F_ACC_contigs.fa
+(coverm_env) [yuwei@n7442 alr2]$ coverm contig --coupled reads/6F_R1.fq.gz reads/6F_R2.fq.gz --reference /u/scratch/y/yuwei/ACC/6F_ACC_contigs.fa --methods tpm --output-file 6F_ACC_coverm.tsv -t 8
+[2025-09-16T15:02:07Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
+[2025-09-16T15:02:07Z INFO  coverm] Writing output to file: 6F_ACC_coverm.tsv
+[2025-09-16T15:02:07Z INFO  bird_tool_utils::external_command_checker] Found minimap2 version 2.29-r1283
+[2025-09-16T15:02:07Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
+[2025-09-16T15:02:07Z INFO  coverm] Not pre-generating minimap2 index
+[2025-09-16T15:05:59Z INFO  coverm::contig] In sample '6F_ACC_contigs.fa/6F_R1.fq.gz', found 3370 reads mapped out of 48800700 total (0.01%)
+
 
 (coverm_env) [yuwei@n1980 ORF_finding]$ coverm contig --coupled 1F.R1.fq.gz 1F.R2.fq.gz --reference 1F_ACC_contigs.fa --methods tpm --output-file 1F_tpm.tsv -t 8
 [2025-05-08T06:41:25Z INFO  bird_tool_utils::clap_utils] CoverM version 0.7.0
@@ -379,5 +388,6 @@ ce 11F_ACC_contigs.fa --methods tpm --output-file 11F_tpm.tsv -t 12
 [2025-05-09T02:04:45Z INFO  bird_tool_utils::external_command_checker] Found samtools version 1.21
 [2025-05-09T02:04:45Z INFO  coverm] Not pre-generating minimap2 index
 [2025-05-09T02:07:48Z INFO  coverm::contig] In sample '11F_ACC_contigs.fa/11F.R1.fq.gz', found 277842 reads mapped out of 47215936 total (0.59%)
+
 
 
