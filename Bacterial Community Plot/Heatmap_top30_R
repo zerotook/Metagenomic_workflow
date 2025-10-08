@@ -4,7 +4,7 @@ library(pheatmap)
 library(RColorBrewer)
 
 # load your input file here; for file from Pavian you will have to reformat the file as example_species.csv
-genera <- read_csv("~/Bacterial Community/Pavian/Specis_clade.csv")
+genera <- read_csv("~/Bacterial Community/Pavian/Genera.csv")
 
 # Top 30 overall
 abund_top30 <- genera %>%
