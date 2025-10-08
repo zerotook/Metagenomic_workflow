@@ -3,8 +3,8 @@ library(dplyr)
 library(pheatmap)
 library(RColorBrewer)
 
-# Read your full desired taxonomylevel abundance table
-phyla <- read_csv("~/Bacterial Community/Pavian/Genera.csv")
+# load your desired taxonomy level abundance table here; reformat according to example_Genera.csv
+phyla <- read_csv("~/Bacterial Community/Pavian/example_Genera.csv")
 
 # Remove unnecessary columns and ensure names are unique
 abund_all <- phyla %>%
@@ -51,4 +51,5 @@ pheatmap(
 #   height = 12,
 #   color = my_colors
 # )
+
 
