@@ -1,0 +1,60 @@
+library(readr)
+library(dplyr)
+library(pheatmap)
+library(RColorBrewer)
+
+# load your input file here; for file from Pavian you will have to reformat the file as example_species.csv
+genera <- read_csv("~/Bacterial Community/Pavian/Specis_clade.csv")
+
+# Top 30 overall
+abund_top30 <- genera %>%
+  select(-lineage) %>%
+  mutate(total_abundance = rowSums(across(-name))) %>%
+  arrange(desc(total_abundance)) %>%
+  slice(1:30) %>%
+  select(-total_abundance)
+
+# Ensure unique, explicit row labels
+abund_top30 <- abund_top30 %>%
+  mutate(name = make.unique(as.character(name)))
+
+row_labels <- abund_top30$name
+mat <- abund_top30 %>%
+  select(-name) %>%
+  as.matrix()
+
+rownames(mat) <- abund_top30$name
+
+# Apply log10(x+1) transform, could adjust to log10(x) by removing +1
+mat_log <- log10(mat + 1)
+
+# Adjust color of the plot here
+my_colors <- colorRampPalette(c("white", "orange", "brown"))(100)
+
+#adjust cluster rows or columns option by change TRUE or FALSE
+pheatmap(
+  mat_log,
+  cluster_rows = TRUE,
+  cluster_cols = FALSE,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  fontsize_row = 10,
+  fontsize_col = 9,
+  main = "Top 30 (log10 abundance + 1)",
+  color = my_colors
+)
+
+# If labels still don’t appear in the RStudio Plots pane, save a bigger file:
+# pheatmap(
+#   mat,
+#   scale = "row",
+#   cluster_rows = TRUE,
+#   cluster_cols = FALSE,
+#   show_rownames = TRUE,
+#   labels_row = row_labels,
+#   fontsize_row = 10,
+#   fontsize_col = 9,
+#   filename = "Top30_Genera_heatmap.png",  # <-- larger canvas
+#   width = 9, height = 12                  # adjust as needed
+# )
+
