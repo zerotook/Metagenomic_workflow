@@ -3,8 +3,8 @@ library(dplyr)
 library(pheatmap)
 library(RColorBrewer)
 
-# Read your full phylum-level abundance table
-phyla <- read_csv("D:/Research/Project_CAFO ARG/Metagenomic Analysis/Bacterial Community/Pavian/Phylum_clade.csv")
+# Read your full desired taxonomylevel abundance table
+phyla <- read_csv("~/Bacterial Community/Pavian/Genera.csv")
 
 # Remove unnecessary columns and ensure names are unique
 abund_all <- phyla %>%
@@ -18,13 +18,13 @@ mat <- abund_all %>%
 
 rownames(mat) <- abund_all$name
 
-# Apply log10(x + 1) transformation
-mat_log <- log10(mat)
+# Apply log10(x + 1) transformation, adjust based on need
+mat_log <- log10(mat+1)
 
-# Define color palette
+# Define color palette, adjust based on need
 my_colors <- colorRampPalette(c("white", "pink", "red"))(100)
 
-# Draw heatmap for all phyla
+# Draw heatmap; adjust cluster based on need
 pheatmap(
   mat_log,
   cluster_rows = TRUE,
@@ -33,7 +33,7 @@ pheatmap(
   show_colnames = TRUE,
   fontsize_row = 10,
   fontsize_col = 9,
-  main = "All Phyla (log10 abundance + 1)",
+  main = "Title (log10 abundance + 1)",
   color = my_colors
 )
 
@@ -51,3 +51,4 @@ pheatmap(
 #   height = 12,
 #   color = my_colors
 # )
+
