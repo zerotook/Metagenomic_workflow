@@ -115,4 +115,38 @@ The provided code is designed for Windows systems. Mac users may need to modify 
 ![image](https://github.com/user-attachments/assets/a0c1da86-2d36-4148-93a6-12fd9147f33b)
 - or upload your report file to Pavian (https://github.com/fbreitwieser/pavian) for further analysis.
 
-
+# ARG Carrying Contigs Analysis
+1. Prodigal to get faa and fna
+```
+prodigal -i /dir/S1.fasta -a /dir/S1_ORFs.faa -p meta
+prodigal -i /dir/S1.fasta -d /dir/S1_ORFs.faa -p meta
+```
+  - if want to run without showing jumping lines on the screen, use
+```
+ nohup prodigal -i /u/scratch/y/yuwei/alr2/assemblies/11S.fasta -d 11S_ORFs.fna -p meta > prodigal.out 2>&1 &
+```
+2. Run salmon on fna
+```
+salmon index -t /u/scratch/y/yuwei/alr2/assemblies/1S_ORFs.fna -i salmon_idx_1S -p 4
+salmon quant -i salmon_idx_1S/ -l A -1 /u/scratch/y/yuwei/alr2/reads/1S_R1.fq.gz -2 /u/scratch/y/yuwei/alr2/reads/1S_R2.fq.gz -p 4 --validateMappings --gcBias -o salmon_1S_ARGs --meta
+```
+3. Blastp on faa from prodigal to get ARG annotations on ORFs
+```
+#Build Database First, download from Zenodo link
+wget link
+mkdb file fasta (not finished
+#edit the sh file based on the computing environment you need
+qsub -v QUERY=/u/scratch/y/yuwei/alr2/assemblies/S1_ORFs.faa,DB=/u/scratch/y/yuwei/ACC/sarg2025/arg2025,OUT=/u/scratch/y/yuwei/ACC/blastp_S1_outfmt7.txt blastp_arg_qsub.sh
+```
+5. Filter generated blastp based on set standards and extract assembled fasta file based on filtered blastp
+```
+#Filter blastp file based on the standard you set, if an ORF have multiple results, this code will select only one result to keep (based on bit score, etc.) so that the number won't count twice during coverM
+python /dir/filter_subset_orf.py   --blast /u/scratch/y/yuwei/ACC/blastp_4S_outfmt7.txt   --orf-faa /u/scratch/y/yuwei/alr2/assemblies/4S_ORFs.faa   --out-tsv /u/scratch/y/yuwei/ACC/ORF/4S_best_per_orf.tsv   --ident-min 80 --qcov-min 0.70 --evalue-max 1e-5
+#Extract fasta file based on contig carrying ARGs
+python /dir/Extract_fa.py -f /u/scratch/y/yuwei/ACC/blastp_S1_outfmt7.txt -a /u/scratch/y/yuwei/alr2/assemblies/S1.fasta -t S1_ACC.txt -o S1_ACC_contigs.fa
+```
+6. Run coverM on fa
+```
+#could run on S1_ACC_contigs.fa if need results sooner
+coverm contig --coupled /u/scratch/y/yuwei/alr2/reads/1F_R1.fq.gz /u/scratch/y/yuwei/alr2/reads/1F_R2.fq.gz --reference /u/scratch/y/yuwei/ACC/1F_ACC_contigs.fa --methods tpm --output-file 1F_tpm.tsv -t 4
+```
